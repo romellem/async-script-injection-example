@@ -24,7 +24,7 @@
 	<p>
 		The larger the file, the longer it takes to download.<br>
 		Clicking on the <strong>first</strong> button explicitly sets <code>`async = false`</code> on the dynamically created script tags, we force the files to execute synchronously in their insertion order, making the log below report that <em>huge.js</em> ran first, finishing with <em>tiny.js</em>.<br>
-		Clicking on the <strong>second</strong> button does not explicitly set this attribute, making the scripts run asynchronously, meaning execution order is no longer tied to insertion order in the DOM. Since this example is using simulated download durations, we should see that <em>tiny.js</em> runs first, followed by <em>huge.js</em>.
+		Clicking on the <strong>second</strong> button does not explicitly set this attribute, making the scripts run asynchronously, meaning execution order is no longer tied to insertion order in the DOM. Since this example is using simulated download durations, we should see that <em>tiny.js</em> runs first, finishing with <em>huge.js</em>.
 	</p>
 	<blockquote>
 		See the following for more information:
