@@ -13,7 +13,6 @@ function ready(fn) {
 ready(function onReady() {
 	var sync = document.getElementById('sync');
 	var async = document.getElementById('async');
-	var loading = document.getElementById('loading');
 	var log = document.getElementById('log');
 
 	function getRandomInt(min, max) {
@@ -40,26 +39,40 @@ ready(function onReady() {
 	function createImplicitAsyncScriptTag(src) {
 		var script = document.createElement('script');
 		script.src = src;
+		script.className = 'dynamic';
 		return script;
 	}
 
 	function createExplicitSyncScriptTag(src) {
 		var script = document.createElement('script');
 		script.src = src;
+		script.className = 'dynamic';
 		script.async = false;
 		return script;
+	}
+
+	function removeAllOldDynamicScripts() {
+		var dynamic_scripts = document.querySelectorAll('.dynamic');
+		for (var i = 0; i < dynamic_scripts.length; i++) {
+			var dynamic_script = dynamic_scripts[i];
+			dynamic_script.parentNode.removeChild(dynamic_script);
+		}
 	}
 
 	var writeLog = (function () {
 		var count = 0;
 		return function (str, no_new_line) {
 			log.value += '[' + count++ + ']: ' + str + (no_new_line ? '' : '\n');
+			
+			// Auto scroll to bottom
+			log.scrollTop = log.scrollHeight;
 		};
 	})();
 	window.writeLog = writeLog;
 
 	function grabSyncScripts() {
 		disableButtons();
+		removeAllOldDynamicScripts();
 
 		var tags = ['huge', 'big', 'medium', 'small', 'tiny'].map(function (size) {
 			return createExplicitSyncScriptTag('/js/' + size + '/' + r() + '.js');
@@ -72,8 +85,7 @@ ready(function onReady() {
 			});
 		});
 
-		writeLog('Synchronously injecting big, medium, and small...');
-		loading.innerText = 'Loading...';
+		writeLog('Synchronously injecting "huge, big, medium, small, tiny" in that order...');
 
 		// Append them in order, largest to smallest
 		tags.forEach(function (tag) {
@@ -83,17 +95,19 @@ ready(function onReady() {
 		Promise.all(load_promises)
 			.then(function () {
 				enableButtons();
-				loading.innerText = '';
+
+				writeLog('Done fetching and executing scripts!\n');
 			})
 			.catch(function (err) {
 				enableButtons();
-				loading.innerText = '';
-				writeLog('Something went wrong... ' + err.toString());
+
+				writeLog('Something went wrong... \n' + err.toString() + '\n');
 			});
 	}
 
 	function grabAyncScripts() {
 		disableButtons();
+		removeAllOldDynamicScripts();
 
 		var tags = ['huge', 'big', 'medium', 'small', 'tiny'].map(function (size) {
 			return createImplicitAsyncScriptTag('/js/' + size + '/' + r() + '.js');
@@ -106,8 +120,7 @@ ready(function onReady() {
 			});
 		});
 
-		writeLog('Asynchronously injecting big, medium, and small...');
-		loading.innerText = 'Loading...';
+		writeLog('Asynchronously injecting "huge, big, medium, small, tiny" in that order...');
 
 		// Append them in order, largest to smallest
 		tags.forEach(function (tag) {
@@ -117,13 +130,13 @@ ready(function onReady() {
 		Promise.all(load_promises)
 			.then(function () {
 				enableButtons();
-				loading.innerText = '';
-				writeLog('Done fetching and executing scripts!');
+
+				writeLog('Done fetching and executing scripts!\n');
 			})
 			.catch(function (err) {
 				enableButtons();
-				loading.innerText = '';
-				writeLog('Something went wrong... ' + err.toString());
+
+				writeLog('Something went wrong... \n' + err.toString() + '\n');
 			});
 	}
 

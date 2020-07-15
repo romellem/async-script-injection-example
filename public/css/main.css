@@ -1,5 +1,14 @@
+body {
+    max-width: 900px;
+}
+
 textarea {
     font-family: monospace;
-    min-height: 400px;
-    min-width: 600px;
+    min-height: 350px;
+    display: block;
+    width: 100%;
+}
+
+button {
+    cursor: pointer;
 }
