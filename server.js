@@ -2,30 +2,26 @@ const express = require('express');
 const morgan = require('morgan');
 const compression = require('compression');
 
-const createEventEmitterCode = (event_type) => {
-	return `(function() {
-var event;
-if (window.CustomEvent && typeof window.CustomEvent === 'function') {
-	event = new CustomEvent('${event_type}', { detail: null });
-} else {
-	event = document.createEvent('CustomEvent');
-	event.initCustomEvent('${event_type}', true, true);
-}
-
-document.dispatchEvent(event);
-})();`;
-};
-
-
 const app = express();
 app.use(morgan('combined'));
 app.use(compression());
 
-app.get('/js/big.js', (req, res) => {
+// Make sure the sizes go from smallest to largest
+const SIZES = ['tiny', 'small', 'medium', 'big', 'huge'];
+app.get('/js/:size/:id.js', (req, res) => {
+	const { size, id } = req.params;
+	if (!SIZES.includes(size) || !id) {
+		return res.status(404);
+	}
+
+	// Small is 0ms delay, up to 800ms delay for Huge
+	let delay = SIZES.indexOf(size) * 200;
+
 	res.type('js');
 	setTimeout(() => {
-		res.send('Hello');
-	}, 100);
+		// `window.writeLog` is exposed in 'main.js'
+		res.send(`window.writeLog("${size}.js finished executing")`);
+	}, delay);
 });
 
 app.use(express.static('public'));

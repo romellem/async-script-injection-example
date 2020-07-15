@@ -5,10 +5,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Async Script Injection Example</title>
 	<link rel="stylesheet" type="text/css" media="all" href="/css/main.css" />
+	<script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
-	Hello World!
-
-	<script type="text/javascript" src="/js/main.js"></script>
+	<p>
+		Async scripts...
+	</p>
+	<button id="sync">Inject scripts<br>synchronously</button>
+	<button id="async">Inject scripts<br>asynchronously</button>
+	<hr>
+	<div id="loading"></div>
+	<div><textarea id="log"></textarea></div>
 </body>
 </html>
