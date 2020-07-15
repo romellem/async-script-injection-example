@@ -4,11 +4,22 @@ body {
 
 textarea {
     font-family: monospace;
-    min-height: 350px;
+    min-height: 300px;
     display: block;
     width: 100%;
 }
 
 button {
     cursor: pointer;
+}
+
+pre code {
+    background: gainsboro;
+    padding: 4px 8px;
+}
+
+blockquote {
+    border-left: 2px solid black;
+    margin-left: 0;
+    padding-left: 8px;
 }
